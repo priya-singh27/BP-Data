@@ -11,4 +11,3 @@ __pycache__/
 *.log
 *.tmp
 
-# Ignore any other specific files you don't want to track
