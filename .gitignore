@@ -1,8 +1,7 @@
 # Ignore virtual environment directories
 fastapienv/
 fastepienv/
-fastapienv2/
-fastepienv2/
+
 
 # Ignore compiled Python files
 __pycache__/
