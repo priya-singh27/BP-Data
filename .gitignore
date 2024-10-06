@@ -1,0 +1,14 @@
+# Ignore virtual environment directories
+fastapienv/
+fastepienv/
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore other temporary files
+*.log
+*.tmp
+
+# Ignore any other specific files you don't want to track
