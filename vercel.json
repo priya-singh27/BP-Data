@@ -1,0 +1,14 @@
+{
+    "builds": [
+      {
+        "src": "bpdata/main.py",
+        "use": "@vercel/python"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "bpdata/main.py"
+      }
+    ]
+  }
