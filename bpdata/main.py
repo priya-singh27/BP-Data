@@ -3,7 +3,7 @@ import base64
 from io import BytesIO
 import json
 import requests
-from model.output_schema import BPOutputSchema
+from .model.output_schema import BPOutputSchema
 
 
 app = FastAPI()
@@ -12,7 +12,7 @@ app = FastAPI()
 api_key = "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"
 
 MAX_FILE_SIZE = 4 * 1024 * 1024  # 4 MB
-ALLOWED_MIME_TYPES = ["image/jpeg", "image/png"]
+ALLOWED_MIME_TYPES = ["image/jpeg", "image/png","image/jpg"]
 
 PROMPT = """The below is an image displaying a Digital Blood Pressure monitor, try to extract the fields SYSTOLIC, DIASTOLIC and PULSE where they represent the Systolic, Diastolic blood pressure and Pulse respectively.
 
