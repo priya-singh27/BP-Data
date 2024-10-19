@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, HTTPException, Request
+from fastapi import FastAPI, UploadFile, HTTPException, Request
 import base64
 import json
 import requests
@@ -42,7 +42,7 @@ async def create_upload_file(req: Request, file: UploadFile) -> BPOutputSchema:
             status_code=415,
             detail=f"Unsupported file type: {file.content_type}. Allowed types are: {', '.join(ALLOWED_MIME_TYPES)}.",
         )
-
+        
     contents = await file.read()
 
     # Encode the image to Base64

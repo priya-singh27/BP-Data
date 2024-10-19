@@ -2,8 +2,6 @@
 fastapienv/
 fastepienv/
 
-
-# Ignore compiled Python files
 __pycache__/
 *.pyc
 *.pyo
@@ -17,5 +15,4 @@ __pycache__/
 .env.development.local
 .env.test.local
 .env.production.local
-.env.local
 
