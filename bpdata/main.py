@@ -1,18 +1,21 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException, Request
 import base64
-from io import BytesIO
 import json
 import requests
+import os
+from dotenv import load_dotenv
 from .model.output_schema import BPOutputSchema
 
+# Load environment variables from .env file
+load_dotenv()
 
 app = FastAPI()
 
-# OpenAI API Key
-api_key = "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"
+# OpenAI API Key from environment variable
+api_key = os.getenv("OPENAI_API_KEY")
 
 MAX_FILE_SIZE = 4 * 1024 * 1024  # 4 MB
-ALLOWED_MIME_TYPES = ["image/jpeg", "image/png","image/jpg"]
+ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/jpg"]
 
 PROMPT = """The below is an image displaying a Digital Blood Pressure monitor, try to extract the fields SYSTOLIC, DIASTOLIC and PULSE where they represent the Systolic, Diastolic blood pressure and Pulse respectively.
 
@@ -23,10 +26,10 @@ Respond in a JSON format in the below format
 
 @app.post("/")
 async def create_upload_file(req: Request, file: UploadFile) -> BPOutputSchema:
-
     content_length = req.headers.get("content-length")
     if content_length is not None:
         content_length = int(content_length)  # Convert to integer
+    
     # Check file size
     if content_length > MAX_FILE_SIZE:
         raise HTTPException(
@@ -68,15 +71,28 @@ async def create_upload_file(req: Request, file: UploadFile) -> BPOutputSchema:
 
     headers = {"Content-Type": "application/json", "Authorization": f"Bearer {api_key}"}
 
-    # Send request to OpenAI API
-    response = requests.post(
-        "https://openrouter.ai/api/v1/chat/completions", headers=headers, json=payload
-    )
-    
-    content = response.json()["choices"][0]['message']['content']
-    extracted_data=json.loads(content)
-    # Return the response from OpenAI API
-    return extracted_data
+    try:
+        # Send request to OpenAI API
+        response = requests.post(
+            "https://openrouter.ai/api/v1/chat/completions", headers=headers, json=payload
+        )
+        
+        response.raise_for_status()  # Raise an error for bad responses
+        
+        content = response.json()["choices"][0]['message']['content']
+        extracted_data = json.loads(content)
+        
+        # Return the response from OpenAI API
+        return extracted_data
+
+    except requests.exceptions.RequestException as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Error communicating with OpenAI API: {str(e)}"
+        )
+
+
+
 
 
 
