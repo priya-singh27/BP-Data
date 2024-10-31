@@ -2,8 +2,11 @@ from inference import get_model
 import supervision as sv
 import cv2
 import numpy as np
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
-API_KEY = "UQ5F7BNjOWg13gaycmyM"
+API_KEY = os.getenv("API_KEY")
 
 bpm_model = get_model(model_id="blood-pressure-monitor-display/1", api_key=API_KEY)
 spg_model = get_model(model_id="sphygmomanometer-qcpzd/1", api_key=API_KEY)

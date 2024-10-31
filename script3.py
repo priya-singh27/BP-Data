@@ -2,9 +2,11 @@ from inference import get_model
 import supervision as sv
 import cv2
 import numpy as np
-from prep import final_prep
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-API_KEY = "UQ5F7BNjOWg13gaycmyM"
+API_KEY = os.getenv("API_KEY")
 
 def calculate_detection_percentages(image, detections):
     """
