@@ -17,3 +17,6 @@ __pycache__/
 .env.test.local
 .env.production.local
 
+script.py
+script2.py
+
