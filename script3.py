@@ -2,8 +2,9 @@ from inference import get_model
 import supervision as sv
 import cv2
 import numpy as np
+from prep import final_prep
 
-API_KEY = "xN8t7Z4ubrvi5PkiI3JI"
+API_KEY = "UQ5F7BNjOWg13gaycmyM"
 
 def calculate_detection_percentages(image, detections):
     """
@@ -37,12 +38,18 @@ def filter_detections(detections, percentages, threshold=7.5):
 
 def main():
     # Load and process image
-    image_file = "crop_PUL.jpg"
+    image_file = "crop_SYS.jpg"
     image = cv2.imread(image_file)
+
+    preprocessed_image = final_prep(image_file)
+    # print(preprocessed_image.shape, len(preprocessed_image.shape))
+    # Convert to 3-channel format for OCR if necessary
+    final_img_rgb = cv2.cvtColor(preprocessed_image, cv2.COLOR_GRAY2BGR)
+
     
-    # Load model and run inference
+    # # Load model and run inference
     model = get_model(model_id="7-segment-display-gxhnj/2", api_key=API_KEY)
-    results = model.infer(image, confidence=0.2)[0]
+    results = model.infer(final_img_rgb, confidence=0.2)[0]
     
     # Extract class names from predictions
     predictions = results.predictions
@@ -68,7 +75,7 @@ def main():
     label_annotator = sv.LabelAnnotator()
     
     # Create annotated image with filtered detections
-    annotated_image = bounding_box_annotator.annotate(scene=image, detections=filtered_detections)
+    annotated_image = bounding_box_annotator.annotate(scene=final_img_rgb, detections=filtered_detections)
     annotated_image = label_annotator.annotate(
         scene=annotated_image,
         detections=filtered_detections,

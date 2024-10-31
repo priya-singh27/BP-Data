@@ -5,7 +5,7 @@ import pytesseract
 
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'#'C:\Users\USER\AppData\Local\Tesseract-OCR\tesseract.exe'
 
-API_KEY = "xN8t7Z4ubrvi5PkiI3JI"
+API_KEY = "UQ5F7BNjOWg13gaycmyM"
 
 def extract_crops_with_margin(image, predictions, classes_of_interest, margin_percent=10):
     """
