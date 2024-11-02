@@ -18,6 +18,5 @@ __pycache__/
 .env.production.local
 
 venv/
-script.py
-script2.py
+
 

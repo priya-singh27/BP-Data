@@ -8,7 +8,7 @@ load_dotenv()
 
 API_KEY = os.getenv("API_KEY")
 
-bpm_model = get_model(model_id="blood-pressure-monitor-display/1", api_key=API_KEY)
+bpm_model = get_model(model_id="blood-pressure-monitor-display/1", api_key=API_KEY)#an instance of finetune yolo model 
 spg_model = get_model(model_id="sphygmomanometer-qcpzd/1", api_key=API_KEY)
 
 
@@ -206,7 +206,7 @@ def main():
 
 
 
-    # sv.plot_image(merged_annotated_image)
+    sv.plot_image(merged_annotated_image)
 
 
 
