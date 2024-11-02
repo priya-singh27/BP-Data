@@ -4,9 +4,9 @@
       "src": "bpdata/main.py",
       "use": "@vercel/python",
       "config": {
-              "runtime": "python3.11",
-              "buildCommand": "python3.11 -m pip install -r requirements.txt"
-          }
+            "runtime": "python3.11",
+            "buildCommand": "python3.11 -m pip install -r requirements.txt"
+        }
     }
   ],
   "routes": [
