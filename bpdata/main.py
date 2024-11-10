@@ -22,7 +22,7 @@ ALLOWED_MIME_TYPES = ["image/jpeg", "image/png"]
 bpm_model = get_model(model_id="blood-pressure-monitor-display/1", api_key=API_KEY)#an instance of finetune yolo model 
 spg_model = get_model(model_id="sphygmomanometer-qcpzd/1", api_key=API_KEY)
 
-@app.post("/")
+@app.post("/extract_ml")#/extract_llm
 async def create_upload_file(req: Request, file: UploadFile) :
     content_length = req.headers.get("content-length")  # Size of file (bytes) in string
     if content_length is not None:

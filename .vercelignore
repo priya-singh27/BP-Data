@@ -1,0 +1,20 @@
+# Ignore Python virtual environments
+fastapienv/
+fastepienv/
+rbflowenv/
+
+# Ignore unnecessary files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+*.whl
+.DS_Store
+.env
+old_requirements.txt
+
+# Ignore any other large or unnecessary directories
+bpdata/
+werkzeug/
+Werkzeug-1.0.1.dist-info/
