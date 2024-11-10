@@ -3,6 +3,7 @@ import json
 import re
 from fastapi import FastAPI, File, UploadFile, HTTPException, Request
 import os
+from pydantic import BaseModel
 import supervision as sv
 # from inference import get_model
 import cv2
@@ -163,14 +164,18 @@ example:
 ```json
 { "SYSTOLIC": <number>, "SYSTOLIC_UNIT": "<extracted unit>", "DIASTOLIC": <number>, "DIASTOLIC_UNIT": "<extracted unit>", "PULSE": <number>, "PULSE_UNIT":" <extracted unit, formatted as bpm,hz etc>"}
 ```
-
-```json
-{ "SYSTOLIC": <number>, "SYSTOLIC_UNIT": "<extracted unit>", "DIASTOLIC": <number>, "DIASTOLIC_UNIT": "<extracted unit>", "PULSE": <number>, "PULSE_UNIT":" <extracted unit, formatted as bpm,hz etc>"}
-```
 """
 
+class MyResponse(BaseModel):
+    SYSTOLIC: int
+    DIASTOLIC: int
+    PULSE: int
+    SYSTOLIC_UNIT: str
+    DIASTOLIC_UNIT: str
+    PULSE_UNIT: str
+
 @app.post("/extract_llm")
-async def create_upload_file(req: Request, file: UploadFile):
+async def create_upload_file(req: Request, file: UploadFile) -> MyResponse:
     content_length = req.headers.get("content-length")
     if content_length is not None:
         content_length = int(content_length)  # Convert to integer
@@ -206,8 +211,12 @@ async def create_upload_file(req: Request, file: UploadFile):
                             "url": f"data:image/jpeg;base64,{encoded_string}"
                         },
                     },
+                    
                 ],
-            }
+            },
+            # {"role": "assistant", "content": [
+            #     {"type": "text", "text": "{"}
+            # ]}
         ],
         "provider": {
             "order": [
@@ -217,10 +226,12 @@ async def create_upload_file(req: Request, file: UploadFile):
         },
         "model": "meta-llama/llama-3.2-11b-vision-instruct",
         # "model": "meta-llama/llama-3.2-90b-vision-instruct", 
+        "temperature": 0.2,
         "max_tokens": 300,
         "response_format": {"type": "json_object"},
+        # "tool_choice":"auto",
     }
-
+    print(OPEN_API_KEY)
     headers = {"Content-Type": "application/json", "Authorization": f"Bearer {OPEN_API_KEY}"}
 
     try:
@@ -238,7 +249,11 @@ async def create_upload_file(req: Request, file: UploadFile):
         
         # return json.loads(content)
         extracted_json=extract_json_from_markdown(content)
-        return  extracted_json # Return the JSON response from OpenRouter
+        # make the keys uppercase
+        new_json = {}
+        for key in extracted_json.keys():
+            new_json[key.upper()] = extracted_json[key]
+        return  new_json # Return the JSON response from OpenRouter
 
     except requests.exceptions.RequestException as e:
         print(e)
