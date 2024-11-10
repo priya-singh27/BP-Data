@@ -10,6 +10,7 @@ uvicorn = "*"
 inference = "*"
 python-multipart = "*"
 python-dotenv = "*"
+requests = "*"
 
 [dev-packages]
 
