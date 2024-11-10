@@ -132,14 +132,19 @@ def extract_json_from_markdown(text):
     - dict: Parsed JSON data as a Python dictionary, or None if no valid JSON is found.
     """
     # Regular expression pattern to match markdown-formatted JSON
-    json_pattern = re.compile(r'```json\s*(.*?)\s*```', re.DOTALL)
+    # json_pattern = re.compile(r'```[a-zA-Z0-9]*\s*(.*?)\s*```', re.DOTALL)
+    # json_pattern = re.compile(r'```[a-zA-Z0-9]*\s*(.*?)\s*```', re.DOTALL)
+    json_pattern = re.compile(r'\{.*?\}', re.DOTALL)
+    
     
     # Search for the pattern in the input text
     match = json_pattern.search(text)
     
     if match:
         # Extract the matched JSON string and load it into a Python dictionary
-        json_str = match.group(1)
+        # json_str = match.group(1)
+        json_str = match.group(0)
+        
         try:
             return json.loads(json_str)
         except json.JSONDecodeError:
@@ -152,7 +157,12 @@ def extract_json_from_markdown(text):
 
 PROMPT = """The below is an image displaying a Digital Blood Pressure monitor, try to extract the fields SYSTOLIC, DIASTOLIC and PULSE where they represent the Systolic, Diastolic blood pressure and Pulse respectively.
 
-Respond in a valid JSON format in the below format  
+Respond in a valid JSON format in the below format encoded as markdown
+
+example: 
+```json
+{ "SYSTOLIC": <number>, "SYSTOLIC_UNIT": "<extracted unit>", "DIASTOLIC": <number>, "DIASTOLIC_UNIT": "<extracted unit>", "PULSE": <number>, "PULSE_UNIT":" <extracted unit, formatted as bpm,hz etc>"}
+```
 
 ```json
 { "SYSTOLIC": <number>, "SYSTOLIC_UNIT": "<extracted unit>", "DIASTOLIC": <number>, "DIASTOLIC_UNIT": "<extracted unit>", "PULSE": <number>, "PULSE_UNIT":" <extracted unit, formatted as bpm,hz etc>"}
@@ -205,7 +215,8 @@ async def create_upload_file(req: Request, file: UploadFile):
             ],
             "allow_fallbacks": False
         },
-        "model": "meta-llama/llama-3.2-90b-vision-instruct", 
+        "model": "meta-llama/llama-3.2-11b-vision-instruct",
+        # "model": "meta-llama/llama-3.2-90b-vision-instruct", 
         "max_tokens": 300,
         "response_format": {"type": "json_object"},
     }
